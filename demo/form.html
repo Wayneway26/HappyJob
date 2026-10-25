@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>测试表单 · 校招简历助手</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 32px 16px 120px; background: #f4f6fb; color: #0f172a;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    .wrap { max-width: 820px; margin: 0 auto; }
+    .banner {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff;
+      border-radius: 16px; padding: 22px 26px; margin-bottom: 18px;
+      box-shadow: 0 14px 34px rgba(79,70,229,.28);
+    }
+    .banner h1 { margin: 0 0 6px; font-size: 19px; }
+    .banner p { margin: 0; font-size: 12.5px; opacity: .88; line-height: 1.7; }
+    .card { background: #fff; border-radius: 14px; padding: 20px 24px 24px; margin-bottom: 16px; box-shadow: 0 2px 10px rgba(15,23,42,.05); }
+    .card h2 { font-size: 15px; margin: 0 0 4px; }
+    .card .sub { font-size: 12px; color: #94a3b8; margin: 0 0 16px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px; }
+    .f { display: flex; flex-direction: column; gap: 5px; }
+    .f.full { grid-column: 1 / -1; }
+    .f label { font-size: 12.5px; color: #334155; font-weight: 550; }
+    .f .tip { font-size: 11px; color: #94a3b8; }
+    input[type=text], input[type=date], input[type=month], select, textarea {
+      border: 1px solid #e2e8f0; background: #fbfcfe; border-radius: 9px;
+      padding: 9px 11px; font-size: 13px; font-family: inherit; outline: none; width: 100%;
+    }
+    input:focus, select:focus, textarea:focus { border-color: #a5b4fc; background: #fff; box-shadow: 0 0 0 3px rgba(99,102,241,.1); }
+    textarea { min-height: 78px; resize: vertical; line-height: 1.6; }
+    .inline { display: flex; gap: 18px; align-items: center; padding: 6px 0; }
+    .inline label { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 400; }
+    table.legacy { width: 100%; border-collapse: collapse; }
+    table.legacy td { padding: 8px 6px; vertical-align: middle; }
+    table.legacy td.lab { width: 120px; color: #334155; font-size: 12.5px; text-align: right; padding-right: 12px; }
+    table.legacy input[type=text] { max-width: 260px; }
+    .bar { display: flex; gap: 10px; margin-top: 8px; }
+    .bar button {
+      border: 1px solid #e2e8f0; background: #fff; border-radius: 9px; padding: 8px 14px;
+      font-size: 12.5px; cursor: pointer; color: #475569;
+    }
+    .bar button:hover { border-color: #c7d2fe; color: #4f46e5; background: #f5f3ff; }
+    .note { font-size: 11.5px; color: #94a3b8; line-height: 1.8; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="banner">
+      <h1>某某集团 2027 届校园招聘 · 在线申请</h1>
+      <p>这是插件自带的本地测试页，用来验证「一键填充」效果。<br>
+         点击右下角「简」悬浮球 → 一键填充，或者按 ⌘/Ctrl + Shift + F。填完点下面「清空表单」可以反复试。</p>
+    </div>
+
+    <form id="applyForm">
+      <div class="card">
+        <h2>一、基本信息</h2>
+        <p class="sub">老式表格布局，很多国企网申长这样</p>
+        <table class="legacy">
+          <tr>
+            <td class="lab">姓名</td>
+            <td><input type="text" name="realName" /></td>
+            <td class="lab">性别</td>
+            <td>
+              <label><input type="radio" name="sex" value="1" />男</label>
+              <label style="margin-left:14px"><input type="radio" name="sex" value="2" />女</label>
+            </td>
+          </tr>
+          <tr>
+            <td class="lab">手机号码</td>
+            <td><input type="text" name="mobile" /></td>
+            <td class="lab">电子邮箱</td>
+            <td><input type="text" name="emailAddr" /></td>
+          </tr>
+          <tr>
+            <td class="lab">出生日期</td>
+            <td><input type="date" name="birth" /></td>
+            <td class="lab">身份证号</td>
+            <td><input type="text" name="idNo" /></td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>二、教育与求职意向</h2>
+        <p class="sub">常见 div + label 布局</p>
+        <div class="row">
+          <div class="f">
+            <label for="school">毕业院校</label>
+            <input type="text" id="school" name="schoolName" placeholder="请输入毕业院校" />
+          </div>
+          <div class="f">
+            <label for="major">所学专业</label>
+            <input type="text" id="major" name="majorName" placeholder="请输入专业名称" />
+          </div>
+          <div class="f">
+            <label for="degree">最高学历</label>
+            <select id="degree" name="degree">
+              <option value="">请选择</option>
+              <option>大专</option>
+              <option>本科</option>
+              <option>硕士</option>
+              <option>博士</option>
+            </select>
+          </div>
+          <div class="f">
+            <label for="grad">预计毕业时间</label>
+            <input type="month" id="grad" name="gradDate" />
+          </div>
+          <div class="f">
+            <label for="job">应聘岗位</label>
+            <input type="text" id="job" name="applyPosition" placeholder="请输入应聘岗位" />
+          </div>
+          <div class="f">
+            <label for="city">期望工作城市</label>
+            <input type="text" id="city" name="expectCity" placeholder="如：深圳" />
+          </div>
+          <div class="f">
+            <label for="gpa">GPA / 平均分</label>
+            <input type="text" id="gpa" name="gpa" placeholder="如 3.6 / 88" />
+          </div>
+          <div class="f">
+            <label for="eng">英语水平</label>
+            <select id="eng" name="englishLevel">
+              <option value="">请选择</option>
+              <option>CET-4</option>
+              <option>CET-6</option>
+              <option>雅思</option>
+              <option>托福</option>
+            </select>
+          </div>
+          <div class="f full">
+            <label>是否服从调剂</label>
+            <div class="inline">
+              <label><input type="radio" name="adjust" value="1" />是</label>
+              <label><input type="radio" name="adjust" value="0" />否</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>三、实习与项目</h2>
+        <p class="sub">结构化经历 + 长文本</p>
+        <div class="row">
+          <div class="f">
+            <label for="c1">公司名称</label>
+            <input type="text" id="c1" name="company" />
+          </div>
+          <div class="f">
+            <label for="p1">职位名称</label>
+            <input type="text" id="p1" name="position" />
+          </div>
+          <div class="f">
+            <label for="s1">实习开始时间</label>
+            <input type="month" id="s1" name="expStart" />
+          </div>
+          <div class="f">
+            <label for="e1">实习结束时间</label>
+            <input type="month" id="e1" name="expEnd" />
+          </div>
+          <div class="f full">
+            <label for="d1">工作内容</label>
+            <textarea id="d1" name="expDesc" placeholder="描述你的职责与成果"></textarea>
+          </div>
+          <div class="f">
+            <label for="pn">项目名称</label>
+            <input type="text" id="pn" name="projectName" />
+          </div>
+          <div class="f">
+            <label for="pr">担任角色</label>
+            <input type="text" id="pr" name="projectRole" />
+          </div>
+          <div class="f full">
+            <label for="pd">项目描述</label>
+            <textarea id="pd" name="projectDesc"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>四、开放题</h2>
+        <p class="sub">只有 placeholder 提示，考验识别能力</p>
+        <div class="row">
+          <div class="f full">
+            <textarea name="selfComment" placeholder="请输入自我评价"></textarea>
+          </div>
+          <div class="f full">
+            <textarea name="honor" placeholder="获奖情况（奖学金、竞赛等）"></textarea>
+          </div>
+          <div class="f full">
+            <textarea name="skill" placeholder="技能特长"></textarea>
+          </div>
+          <div class="f">
+            <label for="em">紧急联系人姓名</label>
+            <input type="text" id="em" name="emergencyName" />
+          </div>
+          <div class="f">
+            <label for="ep">紧急联系人电话</label>
+            <input type="text" id="ep" name="emergencyPhone" />
+          </div>
+          <div class="f full">
+            <label for="cv">简历附件</label>
+            <input type="file" id="cv" name="resume" />
+            <span class="tip">附件受浏览器安全限制，插件不会（也不该）代你上传</span>
+          </div>
+        </div>
+        <div class="bar">
+          <button type="button" onclick="location.reload()">清空表单</button>
+          <button type="button" onclick="dump()">查看已填内容</button>
+        </div>
+        <p class="note" id="dump"></p>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function dump() {
+      const out = [];
+      document.querySelectorAll('#applyForm input, #applyForm select, #applyForm textarea').forEach((el) => {
+        if (el.type === 'radio') {
+          if (el.checked) out.push((el.name || el.id) + ' = ' + (el.closest('label') || {}).innerText);
+        } else if (el.type !== 'file') {
+          out.push((el.name || el.id) + ' = ' + el.value);
+        }
+      });
+      document.getElementById('dump').textContent = out.join('　|　');
+    }
+  </script>
+  <script src="../src/lib/schema.js"></script>
+  <script src="../src/content/content.js"></script>
+</body>
+</html>

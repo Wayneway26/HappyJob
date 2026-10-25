@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="popup.css" />
+  <title>校招简历助手</title>
+</head>
+<body>
+  <header class="head">
+    <div class="logo">简</div>
+    <div class="brand">
+      <h1>校招简历助手</h1>
+      <p id="pageHint">正在读取当前页面…</p>
+    </div>
+    <div class="ring" id="ring"><span id="ringNum">0%</span></div>
+  </header>
+
+  <section class="stats">
+    <div class="stat"><b id="matchedNum">–</b><span>可填字段</span></div>
+    <div class="stat"><b id="totalNum">–</b><span>输入框</span></div>
+    <div class="stat"><b id="fillNum">–</b><span>上次填充</span></div>
+  </section>
+
+  <button class="main" id="btnFill">
+    <span class="ico">⚡</span>
+    <span>
+      <strong>一键填充本页</strong>
+      <em>只填空着的格子，不会覆盖已填内容</em>
+    </span>
+  </button>
+
+  <div class="grid">
+    <button class="ghost" id="btnPanel">打开悬浮面板</button>
+    <button class="ghost" id="btnCopyAll">复制全部资料</button>
+    <button class="ghost" id="btnOptions">编辑我的资料</button>
+    <button class="ghost" id="btnShortcut">快捷键 ⌘⇧F</button>
+  </div>
+
+  <div class="tip" id="tip">
+    首次使用请先点「编辑我的资料」把信息填好，之后每个网申页面都能一键复用。
+  </div>
+
+  <footer>
+    <span id="ver">v1.0.0</span>
+    <span>简历附件需手动上传</span>
+  </footer>
+
+  <script src="../lib/schema.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "校招简历助手",
+  "version": "1.0.0",
+  "description": "提前存好校招资料，网申表单智能识别一键填充；填不上的也能逐项复制粘贴。",
+  "minimum_chrome_version": "100",
+  "permissions": ["storage", "activeTab", "scripting", "clipboardWrite"],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "action": {
+    "default_title": "校招简历助手",
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "options_page": "src/options/options.html",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["src/lib/schema.js", "src/content/content.js"],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ],
+  "commands": {
+    "fill-form": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+F",
+        "mac": "Command+Shift+F"
+      },
+      "description": "一键填充当前页面表单"
+    }
+  }
+}

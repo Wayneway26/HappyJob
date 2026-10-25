@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title>校招简历助手 · 我的资料</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <div class="logo">简</div>
+      <div>
+        <h1>我的校招资料</h1>
+        <p>填一次，所有网申页面复用。数据只存在你自己的浏览器里。</p>
+      </div>
+    </div>
+    <div class="meter">
+      <div class="meter-bar"><i id="meterFill"></i></div>
+      <span id="meterText">0% 完成</span>
+    </div>
+    <div class="actions">
+      <button class="btn ghost" id="btnDemo">测试表单</button>
+      <button class="btn ghost" id="btnCopyAll">复制全部</button>
+      <button class="btn ghost" id="btnImport">导入</button>
+      <button class="btn ghost" id="btnExport">导出</button>
+      <button class="btn primary" id="btnSave">保存</button>
+      <input type="file" id="fileInput" accept="application/json,.json" hidden />
+    </div>
+  </header>
+
+  <main>
+    <section class="notice">
+      <strong>怎么用</strong>
+      <ol>
+        <li>把下面能填的都填了，点右上角<b>保存</b>（改动也会自动保存）。</li>
+        <li>打开任意招聘网站的网申页，点右下角<b>「简」悬浮球</b> → 一键填充，或按 <b>⌘/Ctrl + Shift + F</b>。</li>
+        <li>识别不出来的字段，用悬浮面板的<b>「复制」</b>标签逐项粘贴；简历附件需要手动上传。</li>
+      </ol>
+    </section>
+
+    <div id="sections"></div>
+
+    <section class="card" id="customCard">
+      <div class="card-head">
+        <div>
+          <h2>自定义字段</h2>
+          <p>网申里的特殊问题（如「是否接受调剂」「从哪了解我们」），加在这里也能参与自动填充。</p>
+        </div>
+        <button class="btn ghost small" id="btnAddCustom">+ 添加一条</button>
+      </div>
+      <div id="customList" class="custom-list"></div>
+      <p class="empty-tip" id="customEmpty">还没有自定义字段。</p>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2>数据管理</h2>
+          <p>换电脑或重装浏览器时，用「导出」备份成 JSON，再在新环境「导入」。</p>
+        </div>
+        <button class="btn danger small" id="btnClear">清空全部</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="../lib/schema.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>
