@@ -20,25 +20,29 @@ function toast(msg) {
 
 /* ---------------- 渲染 ---------------- */
 
-function fieldHTML(f) {
-  const v = profile[f.key] == null ? '' : String(profile[f.key]);
+function fieldHTML(f, group, idx) {
+  const raw = group ? (profile[group] && profile[group][idx] ? profile[group][idx][f.key] : '') : profile[f.key];
+  const v = raw == null ? '' : String(raw);
   const wide = f.type === 'textarea' ? ' wide' : '';
   const req = f.required ? '<span class="req">*</span>' : '';
+  const attr = group
+    ? `data-group="${group}" data-idx="${idx}" data-key="${f.key}"`
+    : `data-key="${f.key}"`;
   let control = '';
 
   if (f.type === 'textarea') {
-    control = `<textarea data-key="${f.key}" rows="3" placeholder="${esc(f.ph || '')}">${esc(v)}</textarea>`;
+    control = `<textarea ${attr} rows="3" placeholder="${esc(f.ph || '')}">${esc(v)}</textarea>`;
   } else if (f.type === 'select') {
-    const id = 'dl-' + f.key;
+    const id = 'dl-' + f.key + (group ? '-' + idx : '');
     control =
-      `<input type="text" data-key="${f.key}" list="${id}" value="${esc(v)}" placeholder="${esc(f.ph || (f.options || []).slice(0, 2).join(' / '))}" autocomplete="off" />` +
+      `<input type="text" ${attr} list="${id}" value="${esc(v)}" placeholder="${esc(f.ph || (f.options || []).slice(0, 2).join(' / '))}" autocomplete="off" />` +
       `<datalist id="${id}">${(f.options || []).map((o) => `<option value="${esc(o)}"></option>`).join('')}</datalist>`;
   } else if (f.type === 'date' || f.type === 'month') {
     const ok = f.type === 'month' ? /^\d{4}-\d{2}$/.test(v) : /^\d{4}-\d{2}-\d{2}$/.test(v);
     const type = !v || ok ? f.type : 'text';
-    control = `<input type="${type}" data-key="${f.key}" value="${esc(v)}" placeholder="${esc(f.ph || '')}" />`;
+    control = `<input type="${type}" ${attr} value="${esc(v)}" placeholder="${esc(f.ph || '')}" />`;
   } else {
-    control = `<input type="text" data-key="${f.key}" value="${esc(v)}" placeholder="${esc(f.ph || '')}" autocomplete="off" />`;
+    control = `<input type="text" ${attr} value="${esc(v)}" placeholder="${esc(f.ph || '')}" autocomplete="off" />`;
   }
 
   return `<div class="field${wide}">
@@ -47,19 +51,44 @@ function fieldHTML(f) {
   </div>`;
 }
 
-function renderSections() {
-  const html = RH.SECTIONS.map((s) => {
-    return `<section class="card" data-section="${s.id}">
+function plainCard(s) {
+  return `<section class="card" data-section="${s.id}">
       <div class="card-head">
         <div>
           <h2>${esc(s.title)}</h2>
           <p>${esc(s.desc || '')}</p>
         </div>
       </div>
-      <div class="grid">${s.fields.map(fieldHTML).join('')}</div>
+      <div class="grid">${s.fields.map((f) => fieldHTML(f)).join('')}</div>
     </section>`;
-  }).join('');
-  $('#sections').innerHTML = html;
+}
+
+function repeatCard(s) {
+  const arr = profile[s.repeat] || [];
+  const items = arr.map((e, i) => `
+    <div class="repeat-item">
+      <div class="repeat-head">
+        <span class="repeat-no">第 ${i + 1} 段</span>
+        <button class="del" data-del-group="${s.repeat}" data-idx="${i}">删除</button>
+      </div>
+      <div class="grid">${s.fields.map((f) => fieldHTML(f, s.repeat, i)).join('')}</div>
+    </div>`).join('');
+
+  return `<section class="card" data-section="${s.id}">
+      <div class="card-head">
+        <div>
+          <h2>${esc(s.title)}</h2>
+          <p>${esc(s.desc || '')}</p>
+        </div>
+        <button class="btn ghost small" data-add="${s.repeat}">+ 添加一段</button>
+      </div>
+      <div class="repeat-list">${items}</div>
+      <p class="empty-tip" ${arr.length ? 'style="display:none"' : ''}>还没有，点右上角「添加一段」。</p>
+    </section>`;
+}
+
+function renderSections() {
+  $('#sections').innerHTML = RH.SECTIONS.map((s) => (s.repeat ? repeatCard(s) : plainCard(s))).join('');
 }
 
 function renderCustom() {
@@ -103,8 +132,42 @@ function bind() {
     const el = e.target;
     const key = el.dataset.key;
     if (!key) return;
-    profile[key] = el.value;
+    const group = el.dataset.group;
+    if (group) {
+      const idx = Number(el.dataset.idx);
+      if (!profile[group] || !profile[group][idx]) return;
+      profile[group][idx][key] = el.value;
+    } else {
+      profile[key] = el.value;
+    }
     scheduleSave();
+  });
+
+  $('#sections').addEventListener('click', (e) => {
+    const add = e.target.closest('[data-add]');
+    if (add) {
+      const group = add.dataset.add;
+      const s = RH.SECTIONS.find((x) => x.repeat === group);
+      if (!s) return;
+      const blank = {};
+      s.fields.forEach((f) => (blank[f.key] = ''));
+      profile[group] = profile[group] || [];
+      profile[group].push(blank);
+      renderSections();
+      const idx = profile[group].length - 1;
+      const first = $('#sections').querySelector(`[data-group="${group}"][data-idx="${idx}"]`);
+      if (first) first.focus();
+      scheduleSave();
+      return;
+    }
+
+    const del = e.target.closest('[data-del-group]');
+    if (del) {
+      const group = del.dataset.delGroup;
+      profile[group].splice(Number(del.dataset.idx), 1);
+      renderSections();
+      doSave(true);
+    }
   });
 
   $('#customList').addEventListener('input', (e) => {
@@ -162,7 +225,7 @@ function bind() {
         if (!obj || typeof obj !== 'object') throw new Error('格式不对');
         const merged = Object.assign(RH.defaults(), obj);
         merged.custom = Array.isArray(obj.custom) ? obj.custom : [];
-        profile = merged;
+        profile = RH.migrate(merged);
         renderSections();
         renderCustom();
         renderMeter();
@@ -214,6 +277,15 @@ function bind() {
 (async function init() {
   profile = await RH.getProfile();
   profile.custom = profile.custom || [];
+  // 至少留一段空的，不然新用户看不到输入框
+  RH.repeatSections().forEach((s) => {
+    profile[s.repeat] = profile[s.repeat] || [];
+    if (!profile[s.repeat].length) {
+      const blank = {};
+      s.fields.forEach((f) => (blank[f.key] = ''));
+      profile[s.repeat].push(blank);
+    }
+  });
   renderSections();
   renderCustom();
   renderMeter();

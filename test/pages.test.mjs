@@ -36,7 +36,7 @@ const check = (n, c) => { console.log(`${c ? 'PASS' : 'FAIL'}  ${n}`); if (!c) f
   const doc = dom.window.document;
   check('资料页渲染出分区', doc.querySelectorAll('.card[data-section]').length >= 7);
   check('渲染出姓名输入框', doc.querySelector('[data-key="name"]').value === PROFILE.name);
-  check('渲染出学历下拉', doc.querySelector('[data-key="eduLevel"]').getAttribute('list') === 'dl-eduLevel');
+  check('渲染出学历下拉', (doc.querySelector('[data-key="eduLevel"]').getAttribute('list') || '').startsWith('dl-eduLevel'));
   check('完成度进度条有值', doc.querySelector('#meterText').textContent !== '0% 完成');
 
   // 改一个值 → 自动保存

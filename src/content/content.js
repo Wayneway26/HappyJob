@@ -469,12 +469,26 @@
     const scan = scanPage(p);
     undoStack = [];
 
+    // 多段经历：同一个字段在页面上出现多次时，按 DOM 顺序取第 1、2、3 段
+    const repeatOf = {};
+    RH.repeatSections().forEach((s) => s.fields.forEach((f) => (repeatOf[f.key] = s.repeat)));
+    const seq = {};
+    scan.matched.forEach((m) => {
+      const group = repeatOf[m.rule.key];
+      if (!group) return;
+      const arr = p[group] || [];
+      if (!arr.length) return;
+      const i = (seq[m.rule.key] = (seq[m.rule.key] || 0) + 1) - 1;
+      m.value = arr[i] ? String(arr[i][m.rule.key] || '') : '';
+    });
+
     let filled = 0;
     let skipped = 0;
     const filledList = [];
 
     scan.matched.forEach((m) => {
       const u = m.unit;
+      if (!String(m.value == null ? '' : m.value).trim()) return; // 这一段没填，跳过
       try {
         if (u.type === 'choice') {
           const prev = u.els.map((e) => e.checked);
@@ -634,6 +648,8 @@
     .cp.ok { background: #ffe4d6; color: #b23a1a; }
     .hint { margin-top: 10px; font-size: 11px; color: #9a8f85; line-height: 1.6; }
     .sec { font-size: 11px; color: #9a8f85; margin: 12px 0 4px; font-weight: 600; letter-spacing: .3px; }
+    .sec-row { display: flex; align-items: center; gap: 8px; }
+    .sec-row .cp { margin-left: auto; font-weight: 400; letter-spacing: 0; }
     .search { width: 100%; border: 1px solid #ece1d5; border-radius: 8px; padding: 7px 10px; font-size: 12px; outline: none; margin-bottom: 8px; }
     .search:focus { border-color: #ffb59e; }
     .empty { text-align: center; color: #9a8f85; font-size: 12px; padding: 18px 0; }
@@ -670,20 +686,41 @@
     } catch (e) { /* 忽略 */ }
   }
 
+  function copyRow(label, value) {
+    return '<div class="item"><span class="k">' + esc(label) + '</span>' +
+      '<span class="v" title="' + esc(value) + '">' + esc(String(value).replace(/\n/g, ' ')) + '</span>' +
+      '<button class="cp" data-copy="' + esc(value) + '">复制</button></div>';
+  }
+
   function renderCopyTab(query) {
     const q = (query || '').trim().toLowerCase();
     const parts = [];
     RH.SECTIONS.forEach((s) => {
+      if (s.repeat) {
+        (profile[s.repeat] || []).forEach((entry, i) => {
+          const rows = [];
+          s.fields.forEach((f) => {
+            const v = String(entry[f.key] || '').trim();
+            if (!v) return;
+            if (q && (f.label + v).toLowerCase().indexOf(q) < 0) return;
+            rows.push(copyRow(f.label, v));
+          });
+          if (!rows.length) return;
+          const whole = RH.entryText(s.id, entry);
+          parts.push(
+            '<div class="sec sec-row"><span>' + esc(s.title) + ' ' + (i + 1) + '</span>' +
+            '<button class="cp" data-copy="' + esc(whole) + '">复制整段</button></div>' +
+            rows.join('')
+          );
+        });
+        return;
+      }
       const rows = [];
       s.fields.forEach((f) => {
         const v = String(profile[f.key] || '').trim();
         if (!v) return;
         if (q && (f.label + v).toLowerCase().indexOf(q) < 0) return;
-        rows.push(
-          '<div class="item"><span class="k">' + esc(f.label) + '</span>' +
-          '<span class="v" title="' + esc(v) + '">' + esc(v.replace(/\n/g, ' ')) + '</span>' +
-          '<button class="cp" data-copy="' + esc(v) + '">复制</button></div>'
-        );
+        rows.push(copyRow(f.label, v));
       });
       if (rows.length) parts.push('<div class="sec">' + esc(s.title) + '</div>' + rows.join(''));
     });

@@ -106,7 +106,8 @@
     {
       id: 'edu',
       title: '教育背景',
-      desc: '学历、学校、专业、毕业时间是最容易被筛简历的字段',
+      repeat: 'educations',
+      desc: '本科、硕士都可以加；页面上有几段就按顺序填几段',
       fields: [
         {
           key: 'school', label: '学校', type: 'text', ph: '深圳大学', required: true,
@@ -210,7 +211,8 @@
     {
       id: 'exp',
       title: '实习 / 工作经历',
-      desc: '填最主要的一段；长文本框会自动拼成一段完整描述',
+      repeat: 'experiences',
+      desc: '实习、正职都能加；页面上有多段经历时会依次填入',
       fields: [
         {
           key: 'expCompany', label: '公司 / 单位', type: 'text', ph: '腾讯科技',
@@ -320,6 +322,49 @@
     const p = {};
     RH.allFields().forEach((f) => (p[f.key] = ''));
     p.custom = [];
+    RH.repeatSections().forEach((s) => (p[s.repeat] = []));
+    return p;
+  };
+
+  /** 可以有多段的区块（教育经历、实习经历） */
+  RH.repeatSections = function () {
+    return RH.SECTIONS.filter((s) => !!s.repeat);
+  };
+
+  /** 把旧版单条数据搬进数组，并补齐结构；每次读资料都会跑一遍，幂等 */
+  RH.migrate = function (p) {
+    RH.repeatSections().forEach((s) => {
+      const raw = Array.isArray(p[s.repeat]) ? p[s.repeat].filter((x) => x && typeof x === 'object') : [];
+      let arr = raw.map((e) => {
+        const o = {};
+        s.fields.forEach((f) => (o[f.key] = e[f.key] == null ? '' : String(e[f.key])));
+        return o;
+      });
+
+      // 旧版本只有扁平字段，填过就生成第一条
+      if (!arr.length) {
+        const one = {};
+        let filled = false;
+        s.fields.forEach((f) => {
+          const v = String(p[f.key] || '').trim();
+          one[f.key] = v;
+          if (v) filled = true;
+        });
+        if (filled) arr = [one];
+      }
+      p[s.repeat] = arr;
+    });
+    return p;
+  };
+
+  /** 把每段的第一条同步回扁平字段：匹配引擎和旧数据读的都是扁平键 */
+  RH.syncFlat = function (p) {
+    RH.repeatSections().forEach((s) => {
+      const first = (p[s.repeat] || [])[0] || {};
+      s.fields.forEach((f) => {
+        p[f.key] = first[f.key] == null ? '' : String(first[f.key]);
+      });
+    });
     return p;
   };
 
@@ -327,13 +372,14 @@
   RH.getProfile = async function () {
     try {
       const { profile } = await chrome.storage.local.get('profile');
-      return Object.assign(RH.defaults(), profile || {});
+      return RH.migrate(Object.assign(RH.defaults(), profile || {}));
     } catch (e) {
-      return RH.defaults();
+      return RH.migrate(RH.defaults());
     }
   };
 
   RH.saveProfile = async function (profile) {
+    RH.syncFlat(profile);
     await chrome.storage.local.set({ profile });
     return profile;
   };
@@ -346,11 +392,24 @@
     return Math.round((done / fields.length) * 100);
   };
 
-  /** 把「实习经历」几个字段拼成一段可直接粘贴的文本 */
+  /** 一段经历拼成可直接粘贴的文本（复制模式里的「复制整段」） */
+  RH.entryText = function (sectionId, entry) {
+    if (!entry) return '';
+    if (sectionId === 'edu') {
+      const head = [entry.school, entry.major, entry.eduLevel].filter(Boolean).join(' · ');
+      const time = [entry.enrollDate, entry.gradDate].filter(Boolean).join(' ~ ');
+      return [head, time].filter(Boolean).join('\n');
+    }
+    const head = [entry.expCompany, entry.expPosition].filter(Boolean).join(' · ');
+    const time = [entry.expStart, entry.expEnd].filter(Boolean).join(' ~ ');
+    return [head, time, entry.expDesc].filter(Boolean).join('\n');
+  };
+
   RH.expText = function (p) {
-    const head = [p.expCompany, p.expPosition].filter(Boolean).join(' · ');
-    const time = [p.expStart, p.expEnd].filter(Boolean).join(' ~ ');
-    return [head, time, p.expDesc].filter(Boolean).join('\n');
+    return RH.entryText('exp', {
+      expCompany: p.expCompany, expPosition: p.expPosition,
+      expStart: p.expStart, expEnd: p.expEnd, expDesc: p.expDesc
+    });
   };
 
   RH.projText = function (p) {
@@ -363,6 +422,20 @@
   RH.toPlainText = function (p) {
     const lines = [];
     RH.SECTIONS.forEach((s) => {
+      if (s.repeat) {
+        (p[s.repeat] || []).forEach((entry, i) => {
+          const rows = [];
+          s.fields.forEach((f) => {
+            const v = String(entry[f.key] || '').trim();
+            if (v) rows.push(f.label + '：' + v);
+          });
+          if (!rows.length) return;
+          lines.push('【' + s.title + ' ' + (i + 1) + '】');
+          lines.push(...rows);
+          lines.push('');
+        });
+        return;
+      }
       const rows = [];
       s.fields.forEach((f) => {
         const v = String(p[f.key] || '').trim();
