@@ -27,7 +27,7 @@ async function sendToTab(msg) {
 
 function renderRing(pct) {
   const deg = Math.round((pct / 100) * 360);
-  $('#ring').style.background = `conic-gradient(#4f46e5 ${deg}deg, #eef2ff ${deg}deg)`;
+  $('#ring').style.background = `conic-gradient(#ff5a36 ${deg}deg, #ffe9de ${deg}deg)`;
   $('#ringNum').textContent = pct + '%';
 }
 

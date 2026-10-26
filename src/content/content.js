@@ -571,74 +571,74 @@
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; }
     .fab {
       position: fixed; right: 22px; bottom: 22px; width: 50px; height: 50px; border-radius: 16px;
-      background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff; border: none; cursor: grab;
-      box-shadow: 0 8px 24px rgba(79,70,229,.38); display: flex; align-items: center; justify-content: center;
+      background: #ff5a36; color: #fff; border: none; cursor: grab;
+      box-shadow: 0 8px 24px rgba(255,90,54,.32); display: flex; align-items: center; justify-content: center;
       font-size: 19px; font-weight: 700; letter-spacing: .5px; user-select: none; z-index: 2147483646;
       transition: transform .15s ease, box-shadow .15s ease; touch-action: none;
     }
-    .fab:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(79,70,229,.45); }
+    .fab:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(255,90,54,.38); }
     .fab.dragging { cursor: grabbing; transform: none; }
     .badge {
       position: absolute; top: -6px; right: -6px; min-width: 20px; height: 20px; padding: 0 5px;
-      border-radius: 10px; background: #ef4444; color: #fff; font-size: 11px; line-height: 20px;
+      border-radius: 10px; background: #1b1917; color: #fff; font-size: 11px; line-height: 20px;
       text-align: center; border: 2px solid #fff; font-weight: 600;
     }
     .badge.hide { display: none; }
     .panel {
       position: fixed; right: 22px; bottom: 84px; width: 340px; max-height: 68vh; background: #fff;
       border-radius: 16px; box-shadow: 0 18px 50px rgba(15,23,42,.22), 0 0 0 1px rgba(15,23,42,.06);
-      display: flex; flex-direction: column; overflow: hidden; z-index: 2147483646; color: #0f172a;
+      display: flex; flex-direction: column; overflow: hidden; z-index: 2147483646; color: #1b1917;
     }
     .panel.hide { display: none; }
     .head { display: flex; align-items: center; gap: 10px; padding: 14px 14px 10px; }
     .logo {
-      width: 32px; height: 32px; border-radius: 10px; background: linear-gradient(135deg,#4f46e5,#7c3aed);
+      width: 32px; height: 32px; border-radius: 10px; background: #ff5a36;
       color: #fff; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center;
     }
     .title { font-size: 14px; font-weight: 650; }
-    .sub { font-size: 11.5px; color: #64748b; margin-top: 2px; }
-    .sub b { color: #4f46e5; }
-    .x { margin-left: auto; border: none; background: transparent; font-size: 20px; color: #94a3b8; cursor: pointer; line-height: 1; padding: 2px 4px; }
-    .x:hover { color: #0f172a; }
-    .tabs { display: flex; gap: 4px; padding: 0 12px; border-bottom: 1px solid #f1f5f9; }
+    .sub { font-size: 11.5px; color: #6b6259; margin-top: 2px; }
+    .sub b { color: #d8451f; }
+    .x { margin-left: auto; border: none; background: transparent; font-size: 20px; color: #9a8f85; cursor: pointer; line-height: 1; padding: 2px 4px; }
+    .x:hover { color: #1b1917; }
+    .tabs { display: flex; gap: 4px; padding: 0 12px; border-bottom: 1px solid #f3ece4; }
     .tab {
-      border: none; background: transparent; padding: 8px 10px; font-size: 12.5px; color: #64748b;
+      border: none; background: transparent; padding: 8px 10px; font-size: 12.5px; color: #6b6259;
       cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px;
     }
-    .tab.on { color: #4f46e5; border-bottom-color: #4f46e5; font-weight: 600; }
+    .tab.on { color: #d8451f; border-bottom-color: #ff5a36; font-weight: 600; }
     .gear {
-      margin-left: auto; border: none; background: transparent; color: #94a3b8;
+      margin-left: auto; border: none; background: transparent; color: #9a8f85;
       font-size: 11.5px; cursor: pointer; padding: 8px 2px; font-family: inherit;
     }
-    .gear:hover { color: #4f46e5; }
+    .gear:hover { color: #d8451f; }
     .body { padding: 12px 14px 14px; overflow-y: auto; }
     .row { display: flex; gap: 8px; }
     .btn {
       flex: 1; border: none; border-radius: 9px; padding: 9px 10px; font-size: 12.5px; cursor: pointer;
-      background: #eef2ff; color: #4338ca; font-weight: 600; transition: background .15s;
+      background: #fff1e8; color: #c2410c; font-weight: 600; transition: background .15s;
     }
-    .btn:hover { background: #e0e7ff; }
-    .btn.primary { background: linear-gradient(135deg,#4f46e5,#7c3aed); color: #fff; }
+    .btn:hover { background: #ffe4d6; }
+    .btn.primary { background: #ff5a36; color: #fff; }
     .btn.primary:hover { filter: brightness(1.06); }
-    .btn.ghost { background: #f8fafc; color: #475569; }
+    .btn.ghost { background: #f7f3ee; color: #5c534b; }
     .btn:disabled { opacity: .55; cursor: default; }
-    .stat { margin: 12px 0 8px; font-size: 12px; color: #475569; background: #f8fafc; border-radius: 8px; padding: 8px 10px; line-height: 1.6; }
-    .stat b { color: #059669; }
+    .stat { margin: 12px 0 8px; font-size: 12px; color: #5c534b; background: #fff6ee; border-radius: 8px; padding: 8px 10px; line-height: 1.6; }
+    .stat b { color: #d8451f; }
     .list { margin-top: 6px; }
-    .item { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px dashed #f1f5f9; font-size: 12px; }
+    .item { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px dashed #f3ece4; font-size: 12px; }
     .item:last-child { border-bottom: none; }
-    .k { color: #64748b; width: 84px; flex: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .v { color: #0f172a; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .cp { border: none; background: #f1f5f9; color: #475569; border-radius: 6px; padding: 3px 8px; font-size: 11px; cursor: pointer; flex: none; }
-    .cp:hover { background: #e2e8f0; }
-    .cp.ok { background: #d1fae5; color: #047857; }
-    .hint { margin-top: 10px; font-size: 11px; color: #94a3b8; line-height: 1.6; }
-    .sec { font-size: 11px; color: #94a3b8; margin: 12px 0 4px; font-weight: 600; letter-spacing: .3px; }
-    .search { width: 100%; border: 1px solid #e2e8f0; border-radius: 8px; padding: 7px 10px; font-size: 12px; outline: none; margin-bottom: 8px; }
-    .search:focus { border-color: #a5b4fc; }
-    .empty { text-align: center; color: #94a3b8; font-size: 12px; padding: 18px 0; }
+    .k { color: #6b6259; width: 84px; flex: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .v { color: #1b1917; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .cp { border: none; background: #f3ece4; color: #5c534b; border-radius: 6px; padding: 3px 8px; font-size: 11px; cursor: pointer; flex: none; }
+    .cp:hover { background: #e9e0d5; }
+    .cp.ok { background: #ffe4d6; color: #b23a1a; }
+    .hint { margin-top: 10px; font-size: 11px; color: #9a8f85; line-height: 1.6; }
+    .sec { font-size: 11px; color: #9a8f85; margin: 12px 0 4px; font-weight: 600; letter-spacing: .3px; }
+    .search { width: 100%; border: 1px solid #ece1d5; border-radius: 8px; padding: 7px 10px; font-size: 12px; outline: none; margin-bottom: 8px; }
+    .search:focus { border-color: #ffb59e; }
+    .empty { text-align: center; color: #9a8f85; font-size: 12px; padding: 18px 0; }
     .toast {
-      position: fixed; right: 22px; bottom: 84px; background: #0f172a; color: #fff; font-size: 12px;
+      position: fixed; right: 22px; bottom: 84px; background: #1b1917; color: #fff; font-size: 12px;
       padding: 8px 12px; border-radius: 8px; z-index: 2147483647; opacity: 0; transition: opacity .2s;
     }
     .toast.show { opacity: .95; }
@@ -750,7 +750,9 @@
     style.textContent = PANEL_CSS;
     shadow.appendChild(style);
 
-    const fab = el('button', { class: 'fab', title: '校招简历助手（点击打开）' }, '简<span class="badge hide">0</span>');
+    const fab = el('button', { class: 'fab', title: '校招简历助手（点击打开）' },
+      '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>'
+      + '<span class="badge hide">0</span>');
     const panel = el('div', { class: 'panel hide' });
 
     shadow.appendChild(fab);
@@ -872,7 +874,8 @@
     function renderPanelShell() {
       panel.innerHTML =
         '<div class="head">' +
-        '<div class="logo">简</div><div><div class="title">校招简历助手</div>' +
+        '<div class="logo"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></div>'
+        + '<div><div class="title">校招简历助手</div>' +
         '<div class="sub">检测到 <b>' + (lastScan ? lastScan.units : 0) + '</b> 个输入框</div></div>' +
         '<button class="x" title="关闭">×</button>' +
         '</div>' +
@@ -925,6 +928,38 @@
         (document.body || document.documentElement).appendChild(host);
       }
     }, 2000);
+
+    // 表单是点「下一步」才渲染出来的：只盯新增节点，有新控件才重扫
+    const CONTROL_SEL = 'input, textarea, select, [contenteditable=""], [contenteditable="true"]';
+    const hasControl = (node) => {
+      if (!node || node.nodeType !== 1 || node === host) return false;
+      if (node.matches && node.matches(CONTROL_SEL)) return true;
+      return !!(node.querySelector && node.querySelector(CONTROL_SEL));
+    };
+
+    let watchTimer = null;
+    let lastWatch = 0;
+    try {
+      const mo = new MutationObserver((records) => {
+        let hit = false;
+        for (let i = 0; i < records.length && !hit; i++) {
+          const r = records[i];
+          if (r.target === host || (host && host.contains(r.target))) continue;
+          for (let j = 0; j < r.addedNodes.length; j++) {
+            if (hasControl(r.addedNodes[j])) { hit = true; break; }
+          }
+        }
+        if (!hit) return;
+        clearTimeout(watchTimer);
+        watchTimer = setTimeout(() => {
+          const now = Date.now();
+          if (now - lastWatch < 600) return; // 连续渲染时不反复全量扫描
+          lastWatch = now;
+          try { scanAndRefresh(); } catch (e) { /* 忽略 */ }
+        }, 400);
+      });
+      mo.observe(document.body || document.documentElement, { childList: true, subtree: true });
+    } catch (e) { /* 老版本浏览器没有 MutationObserver，靠上面的定时器兜底 */ }
   }
 
   /* ============================ 消息通道 ============================ */

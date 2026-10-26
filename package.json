@@ -5,7 +5,7 @@
   "type": "module",
   "description": "校招网申一键填充扩展（Chrome / Edge，Manifest V3）",
   "scripts": {
-    "test": "node test/fill.test.mjs && node test/tricky.test.mjs && node test/ui.test.mjs && node test/pages.test.mjs"
+    "test": "node test/fill.test.mjs && node test/tricky.test.mjs && node test/ui.test.mjs && node test/pages.test.mjs && node test/dynamic.test.mjs"
   },
   "devDependencies": {
     "jsdom": "^30.1.3"
